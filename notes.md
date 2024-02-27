@@ -68,4 +68,4 @@ export default function App() {
 
 - Use npm run dev to start the dev server on http://localhost:3000
 
-- Use `<Outlet/>` components on index routes, both the main index route (`/`) and on any nested index routes (e.g., `/jokes/`, which is the index for `/jokes/:jokeId` and `jokes/new`).
+- Use `<Outlet/>` components on parent routes, both the root at root.tsx and on any nested parent routes (e.g., `/jokes/`, which is the parent route for `jokes/_index`, `/jokes/:jokeId`, and `jokes/new`).
