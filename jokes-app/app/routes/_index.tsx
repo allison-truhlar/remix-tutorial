@@ -1,4 +1,15 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
+
+import stylesHref from "../styles/index.css";
+
+export const links: LinksFunction = () => {
+  return [
+    {
+      rel: "stylesheet",
+      href: stylesHref,
+    },
+  ];
+};
 
 export const meta: MetaFunction = () => {
   return [
