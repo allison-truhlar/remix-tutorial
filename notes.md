@@ -66,4 +66,6 @@ export default function App() {
 }
 ```
 
-Use npm run dev to start the dev server on http://localhost:3000
+- Use npm run dev to start the dev server on http://localhost:3000
+
+- Use `<Outlet/>` components on index routes, both the main index route (`/`) and on any nested index routes (e.g., `/jokes/`, which is the index for `/jokes/:jokeId` and `jokes/new`).
