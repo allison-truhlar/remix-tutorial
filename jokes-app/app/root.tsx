@@ -1,4 +1,3 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction } from "@remix-run/node";
 import {
   Links,
@@ -9,9 +8,28 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+import globalHref from "./styles/global.css";
+import globalMedHref from "./styles/global-medium.css";
+import globalLargeHref from "./styles/global-large.css";
+
+export const links: LinksFunction = () => {
+  return [
+    {
+      rel: "stylesheet",
+      href: globalHref,
+    },
+    {
+      rel: "stylesheet",
+      href: globalMedHref,
+      media: "print, (min-width: 640px)",
+    },
+    {
+      rel: "stylesheet",
+      href: globalLargeHref,
+      media: "screen and (min-width: 1024px)",
+    },
+  ];
+};
 
 export default function App() {
   return (
