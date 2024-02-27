@@ -68,4 +68,15 @@ export default function App() {
 
 - Use npm run dev to start the dev server on http://localhost:3000
 
+## Routing
+
 - Use `<Outlet/>` components on parent routes, both the root at root.tsx and on any nested parent routes (e.g., `/jokes/`, which is the parent route for `jokes/_index`, `/jokes/:jokeId`, and `jokes/new`).
+
+- Parameterized routes use the `$` character in the filename. E.g., `jokes/$jokeId` where `$jokeId` can be anything. You can look up that part of the URL and use it to find things in a database, for example.
+
+##Styling
+
+- Just like normal styling on the web (e.g., `<link rel="stylesheet" href="/path-to-file.css/>`), Remix uses `link` tags to add styling. In Remix, you associate `link` tags to routes. When the route is active, the `link` tag is on the page and CSS applies. When the route is not active (the user navigates away), the `link` tag is removed and CSS no longer applies.
+- You add styling by
+  1. Exporting a `links` function ([documentation](https://remix.run/docs/en/main/route/links)) in your route module you want the CSS applied to.
+  2. Adding the built-in `<Links/>` component in the `<head>` of `app/root.tsx`. This is how Remix gets all the `link` function exports from the active rotues and adds `<link/>` tags to all of them.
