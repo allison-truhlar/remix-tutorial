@@ -80,3 +80,4 @@ export default function App() {
 - You add styling by
   1. Exporting a `links` function ([documentation](https://remix.run/docs/en/main/route/links)) in your route module you want the CSS applied to.
   2. Adding the built-in `<Links/>` component in the `<head>` of `app/root.tsx`. This is how Remix gets all the `link` function exports from the active rotues and adds `<link/>` tags to all of them.
+- Note: any styles added at the root will be global styles.
