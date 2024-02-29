@@ -1,8 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 const db = new PrismaClient();
 
+// Neither of the below work with the original ts-node command from the tutorial
+//Original issue I was facing with ts-node: https://github.com/TypeStrong/ts-node/issues/1997
+//tsx as a replacement for ts-node: https://stackoverflow.com/questions/65097694/to-load-an-es-module-set-type-module-in-the-package-json-or-use-the-mjs-e
+//(second response)
+
 // Workaround for bun from https://github.com/prisma/prisma/issues/21324#issuecomment-1751945478
 //This version works for bun prisma/seed.ts (bunx prisma db seed) (bun v.1.0.25)
+//Or for npx tsx prisma/seed.ts
 try {
   await Promise.all(
     getJokes().map((joke) => {
@@ -19,7 +25,7 @@ try {
 }
 
 // // See https://github.com/oven-sh/bun/issues/3137
-// // This version works with tsx primsa/seed.ts, but not npx ts-node or bunx (v.1.0.25)
+// // This version works with tsx primsa/seed.ts, but not bunx (v.1.0.25)
 // async function seed() {
 //   console.log("start seed function");
 //   await Promise.all(
