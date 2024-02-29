@@ -1,0 +1,71 @@
+import { PrismaClient } from "@prisma/client";
+const db = new PrismaClient();
+
+// Workaround for bun from https://github.com/prisma/prisma/issues/21324#issuecomment-1751945478
+//This version works for bun prisma/seed.ts (bunx prisma db seed) (bun v.1.0.25)
+try {
+  await Promise.all(
+    getJokes().map((joke) => {
+      return db.joke.create({ data: joke });
+    })
+  );
+  console.log("after create");
+  const count = await db.joke.count();
+  console.log(`There are ${count} jokes in the database.`);
+} catch (error) {
+  console.error(error);
+  await db.$disconnect();
+  process.exit(1);
+}
+
+// // See https://github.com/oven-sh/bun/issues/3137
+// // This version works with tsx primsa/seed.ts, but not npx ts-node or bunx (v.1.0.25)
+// async function seed() {
+//   console.log("start seed function");
+//   await Promise.all(
+//     getJokes().map((joke) => {
+//       console.log("another joke");
+//       return db.joke.create({ data: joke });
+//     })
+//   );
+//   console.log("after create");
+//   const count = await db.joke.count();
+//   console.log(`There are ${count} jokes in the database.`);
+// }
+
+// seed();
+
+function getJokes() {
+  // shout-out to https://icanhazdadjoke.com/
+
+  return [
+    {
+      name: "Road worker",
+      content: `I never wanted to believe that my Dad was stealing from his job as a road worker. But when I got home, all the signs were there.`,
+    },
+    {
+      name: "Frisbee",
+      content: `I was wondering why the frisbee was getting bigger, then it hit me.`,
+    },
+    {
+      name: "Trees",
+      content: `Why do trees seem suspicious on sunny days? Dunno, they're just a bit shady.`,
+    },
+    {
+      name: "Skeletons",
+      content: `Why don't skeletons ride roller coasters? They don't have the stomach for it.`,
+    },
+    {
+      name: "Hippos",
+      content: `Why don't you find hippopotamuses hiding in trees? They're really good at it.`,
+    },
+    {
+      name: "Dinner",
+      content: `What did one plate say to the other plate? Dinner is on me!`,
+    },
+    {
+      name: "Elevator",
+      content: `My first time using an elevator was an uplifting experience. The second time let me down.`,
+    },
+  ];
+}
