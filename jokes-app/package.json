@@ -18,7 +18,8 @@
     "@remix-run/serve": "^2.7.2",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tsx": "^4.7.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.7.2",
@@ -32,8 +33,6 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prisma": "^5.10.2",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.6"
   },
   "engines": {
