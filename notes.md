@@ -117,11 +117,25 @@ export default function Sandwiches() {
 - To access URL parameters in your loader, like `/jokes/:jokeId`:
 
 ```
+import type {LoaderFunctionArgs} from "@remix/node"
+
 export const loader = async ({
   params,
 }: LoaderFunctionArgs) => {
   console.log(params); // <-- {jokeId: "123"}
 };
+```
+
+And here's how you would access the individual joke from Prisma, inside the loader:
+
+```
+const joke = await db.joke.findUnique({
+  where: { id: jokeId },
+});
+if (!joke){
+  throw new Error("Joke not found")
+}
+return json({joke})
 ```
 
 - **Note** - whatever is returned from the loader will be exposed to the client, even if you don't render it. Therefore, you should always filter out sensitive data you don't want exposed to the client, like passwords.
