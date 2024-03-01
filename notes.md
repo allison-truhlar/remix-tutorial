@@ -81,3 +81,48 @@ export default function App() {
   1. Exporting a `links` function ([documentation](https://remix.run/docs/en/main/route/links)) in your route module you want the CSS applied to.
   2. Adding the built-in `<Links/>` component in the `<head>` of `app/root.tsx`. This is how Remix gets all the `link` function exports from the active rotues and adds `<link/>` tags to all of them.
 - Note: any styles added at the root will be global styles.
+
+## Loaders
+
+- To load data in a Remix route module, you use a `loader`.
+- A `loader` is an `async` function that you export from the route module. It returns a response, which you access in the route component through the `useLoaderData` hook.
+
+Example:
+
+```
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+
+import { db } from "~/utils/db.server";
+
+export const loader = async () => {
+  return json({
+    sandwiches: await db.sandwich.findMany(),
+  });
+};
+
+export default function Sandwiches() {
+  const data = useLoaderData<typeof loader>();
+  return (
+    <ul>
+      {data.sandwiches.map((sandwich) => (
+        <li key={sandwich.id}>{sandwich.name}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+- In the `loader`, you can filter out what data you want from the databaseor API before it is returned to the loader function. This way, you only send what is necessary to the client.
+- To access URL parameters in your loader, like `/jokes/:jokeId`:
+
+```
+export const loader = async ({
+  params,
+}: LoaderFunctionArgs) => {
+  console.log(params); // <-- {jokeId: "123"}
+};
+```
+
+- **Note** - whatever is returned from the loader will be exposed to the client, even if you don't render it. Therefore, you should always filter out sensitive data you don't want exposed to the client, like passwords.
+- **Note** - the tutorial does not cover using [assertion functions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions) on the `data` you get back from `useLoaderData`. This is necessary to ensure the data you get back from the server is correct (type safety), in case someone messed with the server data. They recommend [zod](https://npm.im/zod) for this.
