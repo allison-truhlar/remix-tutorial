@@ -140,3 +140,48 @@ return json({joke})
 
 - **Note** - whatever is returned from the loader will be exposed to the client, even if you don't render it. Therefore, you should always filter out sensitive data you don't want exposed to the client, like passwords.
 - **Note** - the tutorial does not cover using [assertion functions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions) on the `data` you get back from `useLoaderData`. This is necessary to ensure the data you get back from the server is correct (type safety), in case someone messed with the server data. They recommend [zod](https://npm.im/zod) for this.
+
+## Data mutation with Form + action
+
+- A route `action` is a server only function to handle data mutations and other actions. If a non-`GET` request is made to a route (`DELETE`, `PATCH`, `POST`, or `PUT`) then the action is called before the `loader`s.
+- `action`s have the same API as `loader`s, the only difference is when they are called. This enables you to co-locate everything about a data set in a single route module: the data read, the component that renders the data, and the data writes.
+
+Example:
+
+```
+import type { ActionFunctionArgs } from "@remix-run/node"; // or cloudflare/deno
+import { json, redirect } from "@remix-run/node"; // or cloudflare/deno
+import { Form } from "@remix-run/react";
+
+import { TodoList } from "~/components/TodoList";
+import { fakeCreateTodo, fakeGetTodos } from "~/utils/db";
+
+export async function action({
+  request,
+}: ActionFunctionArgs) {
+  const body = await request.formData();
+  const todo = await fakeCreateTodo({
+    title: body.get("title"),
+  });
+  return redirect(`/todos/${todo.id}`);
+}
+
+export async function loader() {
+  return json(await fakeGetTodos());
+}
+
+export default function Todos() {
+  const data = useLoaderData<typeof loader>();
+  return (
+    <div>
+      <TodoList todos={data} />
+      <Form method="post">
+        <input type="text" name="title" />
+        <button type="submit">Create Todo</button>
+      </Form>
+    </div>
+  );
+}
+```
+
+- **Note** - the `redirect`utility in Remix creates a `Response` object that has the right headers/status codes to redirect the user.
